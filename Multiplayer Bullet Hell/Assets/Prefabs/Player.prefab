@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -1282760772501194678}
   - component: {fileID: 1246055133741934298}
   - component: {fileID: 4106178648927049985}
+  - component: {fileID: -1048796936292179739}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -130,7 +131,7 @@ MonoBehaviour:
     i14: 0
     i15: 0
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!143 &1246055133741934298
 CharacterController:
   m_ObjectHideFlags: 0
@@ -161,3 +162,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dce9a3a603e3774ba0eee996143cd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkingSpeed: 6
+  gravity: 20
+--- !u!114 &-1048796936292179739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5246511394030844963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13d6c522af31447398568cc65334232b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 4
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 5
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1

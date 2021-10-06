@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     #region fields
     public float walkingSpeed = 6.0f;
@@ -20,7 +21,10 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        Movement();
+        if(isLocalPlayer)
+        {
+            Movement();
+        }
     }
 
     #region helper methods
