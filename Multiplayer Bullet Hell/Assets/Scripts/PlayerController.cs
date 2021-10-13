@@ -10,6 +10,8 @@ public class PlayerController : NetworkBehaviour
     public float gravity = 20.0f;
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
+
+    public GameObject bullet;
     #endregion
 
     
@@ -24,14 +26,15 @@ public class PlayerController : NetworkBehaviour
         if(isLocalPlayer)
         {
             Movement();
-        }
+            Shoot();
+        }       
     }
 
     #region helper methods
     /// <summary>
     /// Moves the player through inputs.
     /// </summary>
-    public void Movement()
+    private void Movement()
     {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -48,6 +51,17 @@ public class PlayerController : NetworkBehaviour
 
         // Move the controller
         characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void Shoot()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("Shoot");
+            bullet.transform.position = this.transform.position;
+            GameObject bulletClone = Instantiate(bullet);
+            NetworkServer.Spawn(bulletClone);
+        }
     }
     #endregion
 }

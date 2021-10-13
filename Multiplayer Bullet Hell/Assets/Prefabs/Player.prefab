@@ -164,6 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkingSpeed: 6
   gravity: 20
+  bullet: {fileID: 193427778240068466, guid: a239abfcf512d844b84d0e5ea03a1335, type: 3}
 --- !u!114 &-1048796936292179739
 MonoBehaviour:
   m_ObjectHideFlags: 0
