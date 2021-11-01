@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
 public class PlayerController : NetworkBehaviour
@@ -16,6 +17,9 @@ public class PlayerController : NetworkBehaviour
     private List<GameObject> bulletPool = new List<GameObject>();
     public GameObject bullet;
     private int currentBulletIndex = 0;
+
+    private int lifeTotal = 1;
+    private bool isGameOver = false;
     #endregion
 
 
@@ -41,7 +45,13 @@ public class PlayerController : NetworkBehaviour
             {
                 CmdShoot();
             }
-        }       
+
+            if(lifeTotal <= 0)
+            {
+                this.gameObject.SetActive(false);
+                isGameOver = false;
+            }
+        }
     }
 
     #region helper methods
@@ -68,9 +78,15 @@ public class PlayerController : NetworkBehaviour
         characterController.Move(moveDirection * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Spawns a bullet from the pool at the player's position and sets the direction based on the mouse position.
+    /// Uses the bullet's ResetBullet() method.
+    /// </summary>
     [Command]
     private void CmdShoot()
     {
+        // Initially created a bullet clone and instantiated + spawned that.
+        // Switched to using a pool of pre-instantiated bullets for each player.
         //bullet.transform.position = this.transform.position;
         //GameObject bulletClone = Instantiate(bullet);
         //NetworkServer.Spawn(bulletClone);
@@ -84,6 +100,12 @@ public class PlayerController : NetworkBehaviour
         {
             currentBulletIndex = 0;
         }
+    }
+
+    public int ReduceLifeTotal(int i)
+    {
+        lifeTotal -= i;
+        return lifeTotal;
     }
 
     private void OnGUI()
@@ -103,6 +125,22 @@ public class PlayerController : NetworkBehaviour
         GUILayout.Label("Player position: " + this.transform.position);
         GUILayout.Label("Current bullet index: " + currentBulletIndex);
         GUILayout.EndArea();
+
+        if (isGameOver)
+        {
+            GUILayout.BeginArea(new Rect(Screen.width / 2, Screen.height / 2, 100, 50));
+            GUILayout.Label("Game Over");
+            GUILayout.EndArea();
+
+            if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2 + 20, 100, 50), "Restart"))
+            {
+                // need to un-spawn both players
+                //NetworkManager.ServerChangeScene("MainScene"); // Unity docs page missing
+                //NetworkServer.Reset(); // seems to change the host to a client
+                NetworkManager.singleton.ServerChangeScene("MainScene"); // somehow works but changes the lighting?
+            }
+                
+        }
     }
     #endregion
 }

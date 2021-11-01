@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    #region fields
     public Vector3 direction;
     public int speed;
     private Camera cam;
+    #endregion
 
     void Start()
     {
@@ -21,6 +23,7 @@ public class Bullet : MonoBehaviour
         this.transform.position += direction * speed * Time.deltaTime;
     }
 
+    #region helper methods
     private void SetBulletDirection()
     {
         Vector3 point = new Vector3();
@@ -52,6 +55,7 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<MeshRenderer>().material.color = Color.red;
+            other.GetComponent<PlayerController>().ReduceLifeTotal(1);
         }
     }
 
@@ -62,4 +66,5 @@ public class Bullet : MonoBehaviour
             other.GetComponent<MeshRenderer>().material.color = Color.yellow;
         }
     }
+    #endregion
 }
