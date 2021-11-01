@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dce9a3a603e3774ba0eee996143cd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 6
+  walkingSpeed: 4
   gravity: 20
   bullet: {fileID: 193427778240068466, guid: a239abfcf512d844b84d0e5ea03a1335, type: 3}
 --- !u!114 &-1048796936292179739
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 4
-  m_SendInterval: 0.1
+  m_SendInterval: 0.04761905
   m_SyncRotationAxis: 5
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
