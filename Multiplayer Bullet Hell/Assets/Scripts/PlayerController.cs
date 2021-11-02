@@ -39,7 +39,7 @@ public class PlayerController : NetworkBehaviour
     {
         if(isLocalPlayer)
         {
-            CmdMove();
+            Move();
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -48,8 +48,9 @@ public class PlayerController : NetworkBehaviour
 
             if(lifeTotal <= 0)
             {
-                this.gameObject.SetActive(false);
-                isGameOver = false;
+                // I want to either freeze the loser or set their character as not active.
+                //this.gameObject.SetActive(false); // This causes some issues with the OnGUI not being active as well.
+                isGameOver = true;
             }
         }
     }
@@ -58,8 +59,7 @@ public class PlayerController : NetworkBehaviour
     /// <summary>
     /// Moves the player through inputs.
     /// </summary>
-    [Command]
-    private void CmdMove()
+    private void Move()
     {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -92,7 +92,7 @@ public class PlayerController : NetworkBehaviour
         //NetworkServer.Spawn(bulletClone);
 
         //bulletPool[currentBulletIndex].SetActive(true);
-        bulletPool[currentBulletIndex].GetComponent<Bullet>().ResetBullet(this.transform.position);
+        bulletPool[currentBulletIndex].GetComponent<Bullet>().ResetBullet(transform.position);
         NetworkServer.Spawn(bulletPool[currentBulletIndex]);
 
         currentBulletIndex++;
@@ -102,45 +102,49 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    public int ReduceLifeTotal(int i)
+    [Command]
+    public void CmdReduceLifeTotal(int i)
     {
         lifeTotal -= i;
-        return lifeTotal;
     }
 
     private void OnGUI()
     {
-        Vector3 point = new Vector3();
-        Event currentEvent = Event.current;
-        Vector2 mousePos = new Vector2();
-
-        mousePos.x = currentEvent.mousePosition.x;
-        mousePos.y = cam.pixelHeight - currentEvent.mousePosition.y;
-
-        point = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.nearClipPlane));
-
-        GUILayout.BeginArea(new Rect(20, 150, 250, 120));
-        GUILayout.Label("Mouse position: " + mousePos);
-        GUILayout.Label("World position: " + point.ToString("F3"));
-        GUILayout.Label("Player position: " + this.transform.position);
-        GUILayout.Label("Current bullet index: " + currentBulletIndex);
-        GUILayout.EndArea();
-
-        if (isGameOver)
+        if (isLocalPlayer)
         {
-            GUILayout.BeginArea(new Rect(Screen.width / 2, Screen.height / 2, 100, 50));
-            GUILayout.Label("Game Over");
+            Vector3 point = new Vector3();
+            Event currentEvent = Event.current;
+            Vector2 mousePos = new Vector2();
+
+            mousePos.x = currentEvent.mousePosition.x;
+            mousePos.y = cam.pixelHeight - currentEvent.mousePosition.y;
+
+            point = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.nearClipPlane));
+
+            GUILayout.BeginArea(new Rect(20, 150, 250, 120));
+            GUILayout.Label("Mouse position: " + mousePos);
+            GUILayout.Label("World position: " + point.ToString("F3"));
+            GUILayout.Label("Player position: " + this.transform.position);
+            GUILayout.Label("Current bullet index: " + currentBulletIndex);
             GUILayout.EndArea();
 
-            if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2 + 20, 100, 50), "Restart"))
+            if (isGameOver)
             {
-                // need to un-spawn both players
-                //NetworkManager.ServerChangeScene("MainScene"); // Unity docs page missing
-                //NetworkServer.Reset(); // seems to change the host to a client
-                NetworkManager.singleton.ServerChangeScene("MainScene"); // somehow works but changes the lighting?
+                Debug.Log("Game Over");
+                GUILayout.BeginArea(new Rect(Screen.width / 2, Screen.height / 2, 100, 50));
+                GUILayout.Label("Game Over");
+                GUILayout.EndArea();
+
+                if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2 + 20, 100, 50), "Restart"))
+                {
+                    // need to un-spawn both players
+                    //NetworkManager.ServerChangeScene("MainScene"); // Unity docs page missing
+                    //NetworkServer.Reset(); // seems to change the host to a client
+                    NetworkManager.singleton.ServerChangeScene("MainScene"); // somehow works but changes the lighting?
+                }
+
             }
-                
-        }
+        } 
     }
     #endregion
 }
