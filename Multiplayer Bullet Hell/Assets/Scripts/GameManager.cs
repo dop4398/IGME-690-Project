@@ -15,11 +15,12 @@ public class GameManager : NetworkBehaviour
     [ServerCallback]
     void Update()
     {
-        
+        // check players' life totals. If any are at or below 0, call RpcEndMatch().
     }
 
-    public void RestartGame()
+    [ClientRpc]
+    public void RpcEndMatch()
     {
-        //foreach(NetworkLobbyPlayer )
+
     }
 }

@@ -58,6 +58,11 @@ public class Bullet : NetworkBehaviour
         this.transform.position += direction;
     }
 
+
+    // We need to make a ClientRPC method that deals with collisions. The bullets on the server need to tell the client when they interact with a player on the server.
+
+
+
     // For the life of me can't figure out why this method does not fire when the bullet enters the collider of anything other than the player.
     void OnTriggerEnter(Collider other)
     {
