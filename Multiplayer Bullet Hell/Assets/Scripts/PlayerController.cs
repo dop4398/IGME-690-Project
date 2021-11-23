@@ -73,6 +73,15 @@ public class PlayerController : NetworkBehaviour
         lifeTotal -= i;
     }
 
+    [Server]
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Bullet"))
+        {
+            this.GetComponent<MeshRenderer>().material.color = Color.red;
+            TakeDamage(1);
+        }
+    }
 
     private void OnGUI()
     {

@@ -20,9 +20,13 @@ public class Shooting : NetworkBehaviour
         }
     }
 
+    [ClientCallback]
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            CmdShoot();
+        }
     }
 
     #region Helper Methods

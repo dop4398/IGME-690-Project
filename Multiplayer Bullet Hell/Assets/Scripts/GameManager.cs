@@ -16,6 +16,7 @@ public class GameManager : NetworkBehaviour
     void Update()
     {
         // check players' life totals. If any are at or below 0, call RpcEndMatch().
+
     }
 
     [ClientRpc]

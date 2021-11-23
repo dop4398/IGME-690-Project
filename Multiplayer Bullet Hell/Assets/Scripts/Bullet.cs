@@ -6,7 +6,9 @@ using UnityEngine.Networking;
 public class Bullet : NetworkBehaviour
 {
     #region fields
+    [SyncVar]
     public Vector3 direction;
+
     private int speed;
     private Camera cam;
     #endregion
@@ -64,36 +66,36 @@ public class Bullet : NetworkBehaviour
 
 
     // For the life of me can't figure out why this method does not fire when the bullet enters the collider of anything other than the player.
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Bullet hit something");
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    Debug.Log("Bullet hit something");
 
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponent<MeshRenderer>().material.color = Color.red;
-            other.GetComponent<PlayerController>().CmdReduceLifeTotal(1);
-        }
-        else if (other.CompareTag("Wall"))
-        {
-            Debug.Log("Bullet hit wall");
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        other.GetComponent<MeshRenderer>().material.color = Color.red;
+    //        //other.GetComponent<PlayerController>().CmdReduceLifeTotal(1);
+    //    }
+    //    else if (other.CompareTag("Wall"))
+    //    {
+    //        Debug.Log("Bullet hit wall");
 
-            if(other.transform.rotation.y == 0)
-            {
-                direction.x *= -1;
-            }
-            else
-            {
-                direction.y *= -1;
-            }
-        }
-    }
+    //        if(other.transform.rotation.y == 0)
+    //        {
+    //            direction.x *= -1;
+    //        }
+    //        else
+    //        {
+    //            direction.y *= -1;
+    //        }
+    //    }
+    //}
 
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponent<MeshRenderer>().material.color = Color.yellow;
-        }
-    }
+    //void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        other.GetComponent<MeshRenderer>().material.color = Color.yellow;
+    //    }
+    //}
     #endregion
 }
