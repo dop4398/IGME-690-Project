@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 public class Bullet : NetworkBehaviour
 {
     #region Fields
-    [SyncVar]
     public Vector3 direction;
 
     private int speed;
@@ -16,7 +15,7 @@ public class Bullet : NetworkBehaviour
     void Start()
     {
         cam = Camera.main;
-        speed = 3;
+        speed = 5;
         SetBulletDirection();
         this.transform.position += direction;
     }
@@ -24,13 +23,10 @@ public class Bullet : NetworkBehaviour
     [ClientCallback]
     void Update()
     {
-        CmdMoveBullet(direction, speed);
+        CmdMoveBullet(UpdateDirection(), speed);
     }
 
     #region Helper Methods
-    /// <summary>
-    /// Sets the bullet's direction based on mouse position relative to the player.
-    /// </summary>
     [Client]
     private void SetBulletDirection()
     {
@@ -59,6 +55,20 @@ public class Bullet : NetworkBehaviour
         this.transform.position = pos;
         SetBulletDirection();
         this.transform.position += direction;
+    }
+
+    [Server]
+    public Vector3 UpdateDirection()
+    {
+        if (transform.position.x <= -10 || transform.position.x >= 10)
+        {
+            direction.x *= -1;
+        }
+        if (transform.position.z <= -8 || transform.position.z >= 8)
+        {
+            direction.z *= -1;
+        }
+        return direction;
     }
 
     [Command]
