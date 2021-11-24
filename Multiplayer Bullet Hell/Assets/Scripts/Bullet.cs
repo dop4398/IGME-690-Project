@@ -64,6 +64,12 @@ public class Bullet : NetworkBehaviour
     [Command]
     public void CmdMoveBullet(Vector3 direction, int speed)
     {
+        RpcMoveBullet(direction, speed);
+    }
+
+    [ClientRpc]
+    public void RpcMoveBullet(Vector3 direction, int speed)
+    {
         this.transform.position += direction * speed * Time.deltaTime;
     }
     #endregion

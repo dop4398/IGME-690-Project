@@ -36,7 +36,7 @@ public class Shooting : NetworkBehaviour
     /// Uses the bullet's ResetBullet() method.
     /// </summary>
     [Command]
-    private void CmdShoot()
+    public void CmdShoot()
     {
         // Initially created a bullet clone and instantiated + spawned that.
         // Switched to using a pool of pre-instantiated bullets for each player.

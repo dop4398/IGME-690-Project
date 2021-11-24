@@ -14,32 +14,25 @@ public class GameManager : NetworkBehaviour
 
     void Start()
     {
-        Debug.Log("GameManager Start");
-
         cam = Camera.main;
-
-        if (players == null)
-        {
-            FindPlayers();
-        }
     }
 
     [ServerCallback]
     void Update()
     {
-        if (players == null || players.Length == 0)
+        if (players == null || players.Length <= 1)
         {
-            FindPlayers(); // contingency
+            RpcFindPlayers();
         }
-
-        Debug.Log(players.Length);
-
-        // check players' life totals. If any are at or below 0, call RpcEndMatch().
-        foreach (GameObject p in players)
+        else
         {
-            if (p.GetComponent<PlayerController>().GetLifeTotal() <= 0)
+            // check players' life totals. If any are at or below 0, call RpcEndMatch().
+            foreach (GameObject p in players)
             {
-                RpcEndMatch();
+                if (p.GetComponent<PlayerController>().GetLifeTotal() <= 0)
+                {
+                    RpcEndMatch();
+                }
             }
         }
     }
@@ -47,12 +40,17 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcEndMatch()
     {
-        Debug.Log("RPC End Match ran.");
         isGameOver = true;
     }
 
-    [Server]
-    private void FindPlayers()
+    [ClientRpc]
+    public void RpcRestartMatch()
+    {
+        NetworkManager.singleton.ServerChangeScene("MainScene");
+    }
+
+    [ClientRpc]
+    public void RpcFindPlayers()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
     }
@@ -71,8 +69,6 @@ public class GameManager : NetworkBehaviour
         GUILayout.BeginArea(new Rect(20, 150, 250, 120));
         GUILayout.Label("Mouse position: " + mousePos);
         GUILayout.Label("World position: " + point.ToString("F3"));
-        GUILayout.Label("Player position: " + this.transform.position);
-        //GUILayout.Label("Current bullet index: " + currentBulletIndex);
         GUILayout.EndArea();
 
         if (isGameOver)
@@ -84,10 +80,8 @@ public class GameManager : NetworkBehaviour
 
             if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2 + 20, 100, 50), "Restart"))
             {
-                // need to un-spawn both players
-                //NetworkManager.ServerChangeScene("MainScene"); // Unity docs page missing
-                //NetworkServer.Reset(); // seems to change the host to a client
-                NetworkManager.singleton.ServerChangeScene("MainScene"); // somehow works but changes the lighting?
+                // Reset the scene
+                RpcRestartMatch();
             }
 
         }

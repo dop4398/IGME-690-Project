@@ -6,13 +6,9 @@ using UnityEngine.Networking;
 
 public class PlayerController : NetworkBehaviour
 {
-    #region fields
+    #region Fields
     public float walkingSpeed = 4.0f;
     private CharacterController characterController;
-
-    private Camera cam;
-
-    private bool isGameOver = false;
 
     // Synced variables
     [SyncVar]
@@ -21,12 +17,12 @@ public class PlayerController : NetworkBehaviour
     private Vector3 moveDirection = Vector3.zero;
     #endregion
 
-
+    [Client]
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        cam = Camera.main;
     }
+
 
     [ClientCallback]
     void Update()
@@ -59,7 +55,13 @@ public class PlayerController : NetworkBehaviour
     [Command]
     public void CmdMove(Vector3 direction)
     {
-        characterController.Move(direction * Time.deltaTime);
+        RpcMove(direction);
+    }
+
+    [ClientRpc]
+    public void RpcMove(Vector3 direction)
+    {
+        GetComponent<CharacterController>().Move(direction * Time.deltaTime);
     }
 
     [Server]
@@ -74,14 +76,28 @@ public class PlayerController : NetworkBehaviour
         return lifeTotal;
     }
 
+
+    // Make RPC calls for collisions
+    [ClientRpc]
+    public void RpcCollisionEnter()
+    {
+        this.GetComponent<MeshRenderer>().material.color = Color.red;
+        TakeDamage(1);
+        Debug.Log("Lifetotal: " + lifeTotal);
+    }
+
+    [ClientRpc]
+    public void RpcCollisionExit()
+    {
+        this.GetComponent<MeshRenderer>().material.color = Color.yellow;
+    }
+
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
-            this.GetComponent<MeshRenderer>().material.color = Color.red;
-            TakeDamage(1);
-            Debug.Log("Lifetotal: " + lifeTotal);
+            RpcCollisionEnter();
         }
     }
 
@@ -90,7 +106,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
-            this.GetComponent<MeshRenderer>().material.color = Color.yellow;
+            RpcCollisionExit();
         }
     }
     #endregion
