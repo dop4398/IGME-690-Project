@@ -9,6 +9,7 @@ public class Shooting : NetworkBehaviour
     private List<GameObject> bulletPool = new List<GameObject>();
     public GameObject bullet;
     private int currentBulletIndex = 0;
+    private Vector3 offset = new Vector3(0, -100, 0);
     #endregion
 
     void Start()
@@ -16,14 +17,14 @@ public class Shooting : NetworkBehaviour
         for (int i = 0; i < 10; i++)
         {
             bulletPool.Add(Instantiate(bullet));
-            //bulletPool[i].SetActive(false);
+            bulletPool[i].transform.position += offset;
         }
     }
 
     [ClientCallback]
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if(isLocalPlayer && Input.GetKeyDown(KeyCode.Mouse0))
         {
             CmdShoot();
         }
