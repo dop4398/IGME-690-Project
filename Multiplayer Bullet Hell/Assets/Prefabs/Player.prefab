@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1246055133741934298}
   - component: {fileID: 4106178648927049985}
   - component: {fileID: -1048796936292179739}
+  - component: {fileID: 6014564015488833189}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -163,8 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkingSpeed: 4
-  gravity: 20
-  bullet: {fileID: 193427778240068466, guid: a239abfcf512d844b84d0e5ea03a1335, type: 3}
 --- !u!114 &-1048796936292179739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,3 +186,16 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &6014564015488833189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5246511394030844963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8059b245dd121a4488c09954ca0f66b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 193427778240068466, guid: a239abfcf512d844b84d0e5ea03a1335, type: 3}

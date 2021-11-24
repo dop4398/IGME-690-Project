@@ -73,15 +73,29 @@ public class PlayerController : NetworkBehaviour
         lifeTotal -= i;
     }
 
-    [Server]
-    private void OnCollisionEnter(Collision collision)
+    [ServerCallback]
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.CompareTag("Bullet"))
+        Debug.Log("Collision Detected");
+
+        if (other.gameObject.CompareTag("Bullet"))
         {
             this.GetComponent<MeshRenderer>().material.color = Color.red;
             TakeDamage(1);
         }
     }
+
+    [ServerCallback]
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            this.GetComponent<MeshRenderer>().material.color = Color.yellow;
+            TakeDamage(1);
+        }
+    }
+
+
 
     private void OnGUI()
     {
