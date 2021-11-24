@@ -11,3 +11,8 @@ Collision detection between projectiles and walls that resolve with the projecti
 Scene reset (for all players) when one player remains alive.
 
 
+Milestone 3 Goals:
+Fix collision detection between players and bullets so that players (both host and client) turn red and lose health when they collide with a bullet.
+Get bullets to reflect off of walls rather than phase through them.
+
+To properly reach these goals, I will have to refactor the project to incorporate UNet's server and client functions. I have been relying on the NetworkIdentity and NetworkManager components to exchange data between the client and server, but these aren't enough to get the game functional.
