@@ -43,9 +43,17 @@ public class GameManager : NetworkBehaviour
         isGameOver = true;
     }
 
+    [Command]
+    public void CmdRestartMatch()
+    {
+        Debug.Log("Calling RpcRestartMatch().");
+        RpcRestartMatch();
+    }
+
     [ClientRpc]
     public void RpcRestartMatch()
     {
+        Debug.Log("Running RpcRestartMatch().");
         NetworkManager.singleton.ServerChangeScene("MainScene");
     }
 
@@ -55,7 +63,7 @@ public class GameManager : NetworkBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
     }
 
-    private void OnGUI()
+    void OnGUI()
     {
         Vector3 point = new Vector3();
         Event currentEvent = Event.current;
@@ -81,9 +89,8 @@ public class GameManager : NetworkBehaviour
             if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2 + 20, 100, 50), "Restart"))
             {
                 // Reset the scene
-                RpcRestartMatch();
+                CmdRestartMatch();
             }
-
         }
     }
 }

@@ -12,6 +12,7 @@ public class Shooting : NetworkBehaviour
     private Vector3 offset = new Vector3(0, -100, 0);
     #endregion
 
+    [Client]
     void Start()
     {
         for (int i = 0; i < 10; i++)
